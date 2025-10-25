@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anil Metadata Client</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #111;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 320px;
+      text-align: center;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    button {
+      background: #007bff;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover { background: #0056b3; }
+    pre {
+      text-align: left;
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🔐 Anil Metadata Client</h2>
+    <input type="text" id="apiKey" placeholder="Enter your API key" />
+    <button onclick="setKey()">Set API Key</button>
+    <button onclick="getMetadata()">Get Metadata</button>
+    <pre id="output">Waiting for action...</pre>
+  </div>
+
+  <script>
+    const serverUrl = "https://anil-metadata-server.vercel.app";
+
+    async function setKey() {
+      const apiKey = document.getElementById("apiKey").value;
+      if (!apiKey) return alert("Please enter an API key");
+
+      const res = await fetch(serverUrl + "/set-key", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ apiKey })
+      });
+      const data = await res.json();
+      document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function getMetadata() {
+      const res = await fetch(serverUrl + "/metadata");
+      const data = await res.json();
+      document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>
